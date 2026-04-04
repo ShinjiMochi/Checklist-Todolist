@@ -1,13 +1,25 @@
-from time import sleep
+import cutie
 
-from rich.table import Column
-from rich.progress import Progress, BarColumn, TextColumn
-
-text_column = TextColumn("{task.description}", table_column=Column(ratio=1))
-bar_column = BarColumn(bar_width=None, table_column=Column(ratio=2))
-progress = Progress(text_column, bar_column, expand=True)
-
-with progress:
-    for n in progress.track(range(100)):
-        progress.print(n)
-        sleep(0.1)
+if cutie.prompt_yes_or_no("Are you brave enough to continue?"):
+    # List of names to select from, including some captions
+    names = [
+        "Kings:",
+        "Arthur, King of the Britons",
+        "Knights of the Round Table:",
+        "Sir Lancelot the Brave",
+        "Sir Robin the Not-Quite-So-Brave-as-Sir-Lancelot",
+        "Sir Bedevere the Wise",
+        "Sir Galahad the Pure",
+        "Swedish captions:",
+        "Møøse",
+    ]
+    # Names which are captions and thus not selectable
+    captions = [0, 2, 7]
+    # Get the name
+    name = names[cutie.select(names, caption_indices=captions, selected_index=8)]
+    print(f"Welcome, {name}")
+    # Get an integer greater or equal to 0
+    age = cutie.get_number("What is your age?", min_value=0, allow_float=False)
+    # Get input without showing it being typed
+    quest = cutie.secure_input("What is your quest?")
+    print(f"{name}'s quest (who is {age}) is {quest}.")

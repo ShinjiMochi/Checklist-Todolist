@@ -4,5 +4,5 @@ python -m pip install rich
 python -m pip install typer
 python -m pip install cutie
 
-
+## If gusto gumawa ng UI
 python -m textual
