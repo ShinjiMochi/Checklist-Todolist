@@ -1,125 +1,159 @@
-### check requirements.txt for the needed modules ###
-
-from rich.progress import Progress, BarColumn, TextColumn ## progress bar module
-from rich.console import Console ## Displaying of table 
-from rich.table import Table ## Creation of table
-from database import get_all_todos ## task import
+from rich.progress import Progress, BarColumn, TextColumn
+from rich.console import Console
+from rich.table import Table
+from database import get_all_todos
 from time import sleep
 import checklist_func
-import cutie ## Selection module
-import sys
+import cutie
 import os
 
 console = Console()
-progress = Progress()
-progress_count = 0
-progress_previous = 0
-selected_choice = None
-progress_bar_created = False
 
-## Choices the cutie.select function will call
+progress_count = 0
+selected_choice = None
+
 choices = [
     "Add Tasks",
     "Remove Tasks",
     "Update Tasks",
-    "Mark tasks as Complete",
     "Close Application"
-] 
+]
+
+# CATEGORY LIST
+category_choices = [
+    "Assignment",
+    "Quiz",
+    "Assessment Task",
+    "Notes"
+]
+
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
+def get_category():
+    print("\nSelect Category:")
+    for i, cat in enumerate(category_choices, 1):
+        print(f"{i}. {cat}")
+
+    choice = int(input("Enter number: "))
+
+    while choice < 1 or choice > len(category_choices):
+        print("Invalid choice. Try again.")
+        choice = int(input("Enter number: "))
+
+    return category_choices[choice - 1]
+
+
 def show():
-    tasks = get_all_todos()
     global progress_count
-    global progress_previous
     global selected_choice
-    global table
-    global progress_bar_created
 
-    ## Table creation ##
+    tasks_list = get_all_todos()
+    progress_count = 0
+
     console.print("[bold magenta] To do [/bold magenta]!", "📃")
+
     table = Table(show_header=True, header_style="bold blue")
-    table.add_column("#", style="dim", width=6) ## Tasks number (first column)
-    table.add_column("Todo", min_width=20) ## Task description
-    table.add_column("Category", min_width=12, justify="right") ## Self explanitory
-    table.add_column("Finished",  min_width=12, justify="right") ## Tasks status
+    table.add_column("#", style="dim", width=6)
+    table.add_column("Todo", min_width=20)
+    table.add_column("Type", min_width=18, justify="right")
+    table.add_column("Finished", min_width=12, justify="right")
 
-    if progress_bar_created == False:
-        total_progress_done = progress.add_task("[green]Total Completed", total=table.row_count)
-        progress_bar_created = True
-    
-    ## Category colors
     def get_categ_color(category):
-        colors = {'Learn' : 'cyan', 'Excercise' : 'orange', 'Study' : 'green'} ## dictionary for category colors
-        if category in colors:
-            return colors[category]
-        return 'white'
+        colors = {
+            'Assignment': 'cyan',
+            'Quiz': 'yellow',
+            'Assessment Task': 'magenta',
+            'Notes': 'green'
+        }
+        return colors.get(category, 'white')
 
-    ## 
-    for idx, tasks in enumerate(tasks, start=1):
-        c = get_categ_color(tasks.category)
-        is_done_str = '✅' if tasks.status == 2 else '❌'
-        if is_done_str == '✅':
-            progress_count =+ 1
-        table.add_row(str(idx), tasks.task, f'[{c}]{tasks.category}[/{c}]', is_done_str)
+    for idx, task in enumerate(tasks_list, start=1):
+        c = get_categ_color(task.category)
+        is_done_str = '✅' if task.status == 2 else '❌'
 
-    console.print(table) ## displays the table
-    
-    ## Progress bar (still trying to understand)
+        if task.status == 2:
+            progress_count += 1
 
-    progress.start()
-    if progress_previous > progress_count:
-        progress.update(total_progress_done, completed=progress_count)
-        progress_previous = progress_count
-    progress.stop()
-    
-    print("What would you like to do?")
+        table.add_row(str(idx), task.task, f'[{c}]{task.category}[/{c}]', is_done_str)
+
+    console.print(table)
+
+    total_tasks = len(tasks_list)
+
+    if total_tasks > 0:
+        with Progress(
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(),
+            TextColumn("{task.percentage:>3.0f}%")
+        ) as prog:
+
+            task_id = prog.add_task("[green]Completed", total=total_tasks)
+            prog.update(task_id, completed=progress_count)
+
+    print("\nWhat would you like to do?")
     selected_choice = choices[cutie.select(choices)]
-    
-## Selection screen ##
 
-show() ## Calls the show function to print the table
 
-while selected_choice  != 'Close':
+# =========================
+# MAIN LOOP
+# =========================
+
+show()
+
+while selected_choice != "Close Application":
+
     if selected_choice == "Add Tasks":
-        num_tasks_toadd = int(cutie.get_number("How many tasks would you like to add?: "))
-        for i in range(num_tasks_toadd):
-            task = str(input("Name of task: "))
-            print("Category list:\n Excercise \n Study \n Learn")
-            category = str(input("Category of task? (CASE SENSITIVE): "))
+        num = int(cutie.get_number("How many tasks would you like to add?: "))
+
+        for _ in range(num):
+            task = input("Name of task: ")
+            category = get_category()
             checklist_func.add(task, category)
             sleep(1)
-        clear_console()
-        show()
-        
+
     elif selected_choice == "Remove Tasks":
-        num_tasks_todel = int(cutie.get_number("How many tasks would you like to delete?: "))
-        for i in range(num_tasks_todel):
+        num = int(cutie.get_number("How many tasks would you like to delete?: "))
+
+        for _ in range(num):
             position = int(cutie.get_number("Enter Task number: "))
             checklist_func.delete(position)
             sleep(1)
-        clear_console()
-        show()
 
     elif selected_choice == "Update Tasks":
-        num_tasks_toupd = cutie.get_number("How many tasks would you to mark completed?: ")
-        for i in range(num_tasks_toupd):
-            position = int(cutie.get_number("Which would you like to update?: "))
-            task = str(input("Name of task: "))
-            print("Category list:\n Excercise \n Study \n Learn")
-            category = str(input("Category of task? (CASE SENSITIVE): "))
+        num = int(cutie.get_number("How many tasks would you update?: "))
+
+        # =========================
+        # CLEAN UPDATE MENU
+        # =========================
+        update_choices = [
+            "Update Task Name",
+            "Update Category",
+            "Mark as Done"
+        ]
+
+        for _ in range(num):
             position = int(cutie.get_number("Enter Task number: "))
-            checklist_func.update(position, task, category)
+
+            action = cutie.select(update_choices)
+
+            # 1. Update Task Name
+            if action == 0:
+                task = input("New task name: ")
+                checklist_func.update(position, task, None)
+
+            # 2. Update Category
+            elif action == 1:
+                category = get_category()
+                checklist_func.update(position, None, category)
+
+            # 3. Mark as Done
+            elif action == 2:
+                checklist_func.complete(position)
+
             sleep(1)
-        clear_console()
-        show()
-            
-    elif selected_choice == "Mark tasks as Complete":
-        num_tasks_tomark = int(cutie.get_number("How many tasks would you to mark completed?: "))
-        for i in range(num_tasks_tomark):
-            position = int(cutie.get_number("Enter Task number: "))
-            checklist_func.complete(position)
-            sleep(1)
-        clear_console()
-        show()
+
+    clear_console()
+    show()
