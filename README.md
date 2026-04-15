@@ -1,9 +1,9 @@
 # :rocket: Productivity Tracker :rocket:
 
 ## Team Members
-- Barizo, Julian
+- Barizo, Julian Benedict
 - Guarin, Jan Mikaela
-- Lopez, Dion
+- Lopez, Andrei Dion
   
 # ⭐ Overview of the Project
 The Productivity Tracker is a command - line based application designed to help users manage and organize their tasks efficiently. It allows users to add, remove, and update tasks, set deadline, categorize, and monitor their progress.
