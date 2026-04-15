@@ -20,17 +20,17 @@ The system provides a simple and interactive interface using Pythonm, making it 
 
 ## Task Categories
 - Modify task detials with the following options:
-    - ### Update Task Name
-    - ### Update Category
-    - ### Set or Update Deadline
-    - ### Mark task as completed
+    - #### Update Task Name
+    - #### Update Category
+    - #### Set or Update Deadline
+    - #### Mark task as completed
 
 ## Task Categories
 - Organize tasks into:
-    - ### Quiz
-    - ### Assignment
-    - ### Assesment Task
-      ### Notes
+    - #### Quiz
+    - #### Assignment
+    - #### Assesment Task
+      #### Notes
 
 ## Task Completion Tracking
 - Tasks are marked as completed or not completed using symbols.
