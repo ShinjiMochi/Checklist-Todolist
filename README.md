@@ -13,7 +13,7 @@ The system provides a simple and interactive interface using Pythonm, making it 
 # ⭐ Features
 
 ## Add Tasks 
-- Create new tasks and assign them to a category/
+- Create new tasks and assign them to a category.
 
 ## Remove Tasks
 - Delete task from the list using their task number.
@@ -40,3 +40,6 @@ The system provides a simple and interactive interface using Pythonm, making it 
 
 ## Interactive CLI Inteface 
 - Uses Rich and Cutie libraries for a clean and user - friendly terminal experience
+
+## Task Priority Sort
+- Sorts tasks priority by their due dates.
