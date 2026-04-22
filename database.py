@@ -1,5 +1,4 @@
 import sqlite3
-from typing import List
 import datetime
 from model import Todo
 
@@ -40,7 +39,7 @@ def insert_todo(todo: Todo):
                    'due_date': todo.due_date})
 
 
-def get_all_todos() -> List[Todo]:
+def get_all_todos() -> list[Todo]:
     c.execute('select * from todos')
     results = c.fetchall()
     todos = []
@@ -49,7 +48,7 @@ def get_all_todos() -> List[Todo]:
     return todos
 
 
-def get_todos_sorted_by_due_date() -> List[Todo]:
+def get_todos_sorted_by_due_date() -> list[Todo]:
     """Returns todos sorted by due_date ascending (None/empty due dates go last)."""
     todos = get_all_todos()
     def sort_key(todo):

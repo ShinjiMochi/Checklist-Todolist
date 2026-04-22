@@ -7,12 +7,13 @@ import datetime
 # =========================
 # GREEN THEME COLORS
 # =========================
-BG = "#0F2A1D"
-CARD = "#1B4332"
-ACCENT = "#2ECC71"
-ACCENT_SOFT = "#52B788"
-TEXT = "#E9F5EC"
-MUTED = "#A3BFA8"
+BG = "#305480"
+CARD = "#9bc1d9"
+ACCENT = "#e1f6f7"
+ACCENT_SOFT = "#e5f6f7"
+TEXT = "#BFD4DB"
+TEXT2 = "#305480"
+MUTED = "#88AED0"
 BAR_EMPTY = "#555555"
 
 # =========================
@@ -22,7 +23,7 @@ class TodoApp:
     def __init__(self, root):
         self.root = root
         self.root.title("To-Do Manager")
-        self.root.geometry("900x550")
+        self.root.geometry("900x700")
         self.root.configure(bg=BG)
 
         self.sort_by_due = False
@@ -36,8 +37,8 @@ class TodoApp:
     def setup_ui(self):
         title = tk.Label(
             self.root,
-            text="📋 TO-DO DASHBOARD",
-            font=("Segoe UI", 22, "bold"),
+            text="📋 TaskMan",
+            font=("Helvetica", 22, "bold"),
             bg=BG,
             fg=ACCENT
         )
@@ -52,10 +53,10 @@ class TodoApp:
                         foreground=TEXT,
                         fieldbackground=CARD,
                         rowheight=35,
-                        font=("Segoe UI", 11))
+                        font=("Helvetica", 11, "bold"))
 
         style.configure("Treeview.Heading",
-                        font=("Segoe UI", 12, "bold"),
+                        font=("Helvetica", 12, "bold"),
                         background=ACCENT_SOFT,
                         foreground="black")
 
@@ -147,15 +148,15 @@ class TodoApp:
             delta = (due_date - today).days
 
             if delta < 0:
-                return f"{abs(delta)} day(s) overdue", "red"
+                return f"{abs(delta)} day(s) overdue", "#F93E34"
             elif delta == 0:
-                return "Due today!", "orange"
+                return "Due today!", "#FFB64A"
             elif delta <= 2:
-                return f"{delta} day(s)", "orange"
+                return f"{delta} day(s)", "#FFB64A"
             elif delta <= 7:
-                return f"{delta} day(s)", "yellow"
+                return f"{delta} day(s)", "#FFF27C"
             else:
-                return f"{delta} day(s)", "lightgreen"
+                return f"{delta} day(s)", "#AEFF9F"
         except:
             return "-", "white"
 
@@ -250,17 +251,17 @@ class TodoApp:
         win.geometry("350x320")
         win.configure(bg=CARD)
 
-        tk.Label(win, text="Task", bg=CARD, fg=TEXT).pack(pady=5)
+        tk.Label(win, text="Task", bg=CARD, fg=TEXT2).pack(pady=5)
         task_entry = tk.Entry(win)
         task_entry.pack()
 
-        tk.Label(win, text="Category", bg=CARD, fg=TEXT).pack(pady=5)
+        tk.Label(win, text="Category", bg=CARD, fg=TEXT2).pack(pady=5)
         category = ttk.Combobox(win, values=[
             "Assignment", "Quiz", "Assessment Task", "Notes"
         ])
         category.pack()
 
-        tk.Label(win, text="Due Date (YYYY-MM-DD)", bg=CARD, fg=TEXT).pack(pady=5)
+        tk.Label(win, text="Due Date (YYYY-MM-DD)", bg=CARD, fg=TEXT2).pack(pady=5)
         due_entry = tk.Entry(win)
         due_entry.pack()
 

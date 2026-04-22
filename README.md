@@ -30,7 +30,7 @@ The system provides a simple and interactive interface using Pythonm, making it 
     - #### Quiz
     - #### Assignment
     - #### Assesment Task
-    - #### Notes
+      #### Notes
 
 ## Task Completion Tracking
 - Tasks are marked as completed or not completed using symbols.
